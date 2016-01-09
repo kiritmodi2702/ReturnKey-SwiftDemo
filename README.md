@@ -1,3 +1,3 @@
 # ReturnKey-SwiftDemo
 
-Adding Return key on Numberpad Keyboard in swift : http://iosdevcenters.blogspot.in/2015/12/how-to-set-use-multiple-font-colors-in.html
+Adding Return key on Numberpad Keyboard in swift : http://iosdevcenters.blogspot.in/2016/01/how-to-adding-return-key-in-number.html
