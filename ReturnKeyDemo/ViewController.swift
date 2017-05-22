@@ -11,16 +11,16 @@ import UIKit
 class ViewController: UIViewController , UITextFieldDelegate {
 
     @IBOutlet weak var txtReturn: UITextField!
-    let button = UIButton(type: UIButtonType.Custom)
+    let button = UIButton(type: UIButtonType.custom)
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        button.setTitle("Return", forState: UIControlState.Normal)
-        button.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
-        button.frame = CGRectMake(0, 163, 106, 53)
+        button.setTitle("Return", for: UIControlState())
+        button.setTitleColor(UIColor.black, for: UIControlState())
+        button.frame = CGRect(x: 0, y: 163, width: 106, height: 53)
         button.adjustsImageWhenHighlighted = false
-        button.addTarget(self, action: "Done:", forControlEvents: UIControlEvents.TouchUpInside)
+        button.addTarget(self, action: #selector(ViewController.Done(_:)), for: UIControlEvents.touchUpInside)
         
     }
 
@@ -29,25 +29,20 @@ class ViewController: UIViewController , UITextFieldDelegate {
         // Dispose of any resources that can be recreated.
     }
     
-    func textFieldDidBeginEditing(textField: UITextField) {
-        
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardWillShow:", name: UIKeyboardWillShowNotification, object: nil)
-        
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        NotificationCenter.default.addObserver(self, selector: #selector(ViewController.keyboardWillShow(_:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
     }
     
-    func keyboardWillShow(note : NSNotification) -> Void{
-        
-        dispatch_async(dispatch_get_main_queue()) { () -> Void in
-            
-            self.button.hidden = false
-            let keyBoardWindow = UIApplication.sharedApplication().windows.last
-            self.button.frame = CGRectMake(0, (keyBoardWindow?.frame.size.height)!-53, 106, 53)
+    func keyboardWillShow(_ note : Notification) -> Void{
+        DispatchQueue.main.async { () -> Void in
+            self.button.isHidden = false
+            let keyBoardWindow = UIApplication.shared.windows.last
+            self.button.frame = CGRect(x: 0, y: (keyBoardWindow?.frame.size.height)!-53, width: 106, height: 53)
             keyBoardWindow?.addSubview(self.button)
-            keyBoardWindow?.bringSubviewToFront(self.button)
+            keyBoardWindow?.bringSubview(toFront: self.button)
             
-            UIView.animateWithDuration(((note.userInfo! as NSDictionary).objectForKey(UIKeyboardAnimationCurveUserInfoKey)?.doubleValue)!, delay: 0, options: UIViewAnimationOptions.CurveEaseIn, animations: { () -> Void in
-                
-                self.view.frame = CGRectOffset(self.view.frame, 0, 0)
+            UIView.animate(withDuration: (((note.userInfo! as NSDictionary).object(forKey: UIKeyboardAnimationCurveUserInfoKey) as AnyObject).doubleValue)!, delay: 0, options: UIViewAnimationOptions.curveEaseIn, animations: { () -> Void in
+                self.view.frame = self.view.frame.offsetBy(dx: 0, dy: 0)
                 }, completion: { (complete) -> Void in
                     print("Complete")
             })
@@ -55,9 +50,9 @@ class ViewController: UIViewController , UITextFieldDelegate {
         
     }
     
-    func Done(sender : UIButton){
+    func Done(_ sender : UIButton){
         
-        dispatch_async(dispatch_get_main_queue()) { () -> Void in
+        DispatchQueue.main.async { () -> Void in
             
             self.txtReturn.resignFirstResponder()
             
